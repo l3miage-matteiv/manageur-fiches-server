@@ -43,8 +43,11 @@ public class HttpTest {
         }
   
         model.put("records", output);
+        stmt.close();
+        connection.close();
         return "db";
       } catch (Exception e) {
+        response.setStatus(500);
         try {
           response.getOutputStream().print( e.getMessage() );
         } catch (Exception e2) {

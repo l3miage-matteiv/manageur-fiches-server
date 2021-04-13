@@ -18,11 +18,13 @@ public class DbConnection {
 
     @Bean
     public DataSource dataSource() throws SQLException {
+        System.out.println("dataSource !!!");
         if (dbUrl == null || dbUrl.isEmpty()) {
             return new HikariDataSource();
         } else {
             HikariConfig config = new HikariConfig();
             config.setJdbcUrl(dbUrl);
+            config.setMaximumPoolSize(3);
             return new HikariDataSource(config);
         }
     }
