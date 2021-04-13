@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class RestServer {
     public static void main(String[] args) {
+        System.out.println("go Firebase");
         try {
             FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.getApplicationDefault())
@@ -19,9 +20,9 @@ public class RestServer {
                 .build();
 
             FirebaseApp.initializeApp(options);
-            System.out.println("banco pour");
+            System.out.println("banco pour Firebase");
         } catch (IOException e) {
-            System.err.println( e.getLocalizedMessage() );
+            System.err.println( "error: " + e.getLocalizedMessage() );
         }
         SpringApplication.run(RestServer.class, args);
     }
