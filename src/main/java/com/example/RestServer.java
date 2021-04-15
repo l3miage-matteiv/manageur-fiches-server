@@ -16,7 +16,7 @@ public class RestServer {
         try {
             FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.getApplicationDefault())
-                .setDatabaseUrl("https://<DATABASE_NAME>.firebaseio.com/")
+                // .setDatabaseUrl("https://<DATABASE_NAME>.firebaseio.com/")
                 .build();
 
             FirebaseApp.initializeApp(options);
