@@ -7,13 +7,17 @@ public class Utilisateur {
     private String tel;
     private String mail;
     private int idAdresse;
+    private String adresse;
+    private String codePostal;
+    private String ville;
+    private String pays;
     private String typeUtilisateur;
     
-    public int getId() {
+    public int getID() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setID(int id) {
         this.id = id;
     }
 
@@ -55,6 +59,38 @@ public class Utilisateur {
 
     public void setIdAdresse(int idAdresse) {
         this.idAdresse = idAdresse;
+    }
+
+    public String getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
+    }
+
+    public String getCodePostal() {
+        return codePostal;
+    }
+
+    public void setCodePostal(String codePostal) {
+        this.codePostal = codePostal;
+    }
+
+    public String getVille() {
+        return ville;
+    }
+
+    public void setVille(String ville) {
+        this.ville = ville;
+    }
+
+    public String getPays() {
+        return pays;
+    }
+
+    public void setPays(String pays) {
+        this.pays = pays;
     }
 
     public String getTypeUtilisateur() {

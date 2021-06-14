@@ -27,8 +27,8 @@ import org.springframework.web.server.ResponseStatusException;
 //indique que le contrôleur accepte les requêtes provenant d'une source quelconque (et donc pas nécessairement le même serveur). 
 @CrossOrigin
 // Indique que les ressources HTTP qui seront déclarées dans la classe seront toutes préfixées par /api/users.
-@RequestMapping("/utilisateur")
-public class UtilisateurCRUD {
+@RequestMapping("/etudiant")
+public class EtudiantCRUD {
     
     //@Autowired permet au Framework Spring de résoudre et injecter le Bean qui gère la connexion à la base de donnée
     @Autowired
@@ -36,26 +36,31 @@ public class UtilisateurCRUD {
     
     //READ ALL -- GET
     @GetMapping("/")
-    public ArrayList<Utilisateur> getAllUtilisateurs(HttpServletResponse response) {
+    public ArrayList<Etudiant> getAllEtudiants(HttpServletResponse response) {
         try (Connection connection = dataSource.getConnection()) {
             Statement stmt = connection.createStatement(); 
-            ResultSet rs = stmt.executeQuery("SELECT * FROM utilisateur LEFT OUTER JOIN adresse ON (utilisateur.id_adresse = adresse.id)");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM etudiant LEFT OUTER JOIN utilisateur ON (etudiant.id_utilisateur = utilisateur.id) LEFT OUTER JOIN adresse ON (utilisateur.id_adresse = adresse.id)");
             
-            ArrayList<Utilisateur> L = new ArrayList<Utilisateur>();
+            ArrayList<Etudiant> L = new ArrayList<Etudiant>();
             while (rs.next()) { 
-                Utilisateur u = new Utilisateur();
-                u.setID(rs.getInt("id"));
-                u.setNom(rs.getString("nom"));
-                u.setPrenom(rs.getString("prenom"));
-                u.setTel(rs.getString("tel"));
-                u.setMail(rs.getString("mail"));
-                u.setIdAdresse(rs.getInt("id_adresse"));
-                u.setAdresse(rs.getString("adresse"));
-                u.setCodePostal(rs.getString("code_postal"));
-                u.setVille(rs.getString("ville"));
-                u.setPays(rs.getString("pays"));
-                u.setTypeUtilisateur(rs.getString("type_utilisateur"));
-                L.add(u);
+                Etudiant e = new Etudiant();
+                e.setID(rs.getInt("id_utilisateur"));
+                e.setNom(rs.getString("nom"));
+                e.setPrenom(rs.getString("prenom"));
+                e.setTel(rs.getString("tel"));
+                e.setMail(rs.getString("mail"));
+                e.setIdAdresse(rs.getInt("id_adresse"));
+                e.setAdresse(rs.getString("adresse"));
+                e.setCodePostal(rs.getString("code_postal"));
+                e.setVille(rs.getString("ville"));
+                e.setPays(rs.getString("pays"));
+                e.setTypeUtilisateur(rs.getString("type_utilisateur"));
+                e.setNumeroEtudiant(rs.getString("numero_etudiant"));
+                e.setTypeAffiliation(rs.getString("type_affiliation"));
+                e.setCaisseAssuranceMaladie(rs.getString("caisse_assurance"));
+                e.setInscription(rs.getString("inscription"));
+                e.setEnseignantReferent(rs.getString("enseignant_referent"));
+                L.add(e);
             } 
             return L;
         } catch (Exception e) {
@@ -74,29 +79,38 @@ public class UtilisateurCRUD {
 
     //READ -- GET 
     @GetMapping("/{id}")
-    public Utilisateur read(@PathVariable(value="id") int id, HttpServletResponse response) {
+    public Etudiant read(@PathVariable(value="id") int id, HttpServletResponse response) {
         try (Connection connection = dataSource.getConnection()) {
             Statement stmt = connection.createStatement(); 
-            ResultSet rs = stmt.executeQuery("SELECT * FROM utilisateur where id = '" + id + "'");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM etudiant LEFT OUTER JOIN utilisateur ON (etudiant.id_utilisateur = utilisateur.id) LEFT OUTER JOIN adresse ON (utilisateur.id_adresse = adresse.id) where id_utilisateur = '" + id + "'");
             
-            Utilisateur u = new Utilisateur();
+            Etudiant e = new Etudiant();
             while (rs.next()) { 
-                u.setID(rs.getInt("id"));
-                u.setNom(rs.getString("nom"));
-                u.setPrenom(rs.getString("prenom"));
-                u.setTel(rs.getString("tel"));
-                u.setMail(rs.getString("mail"));
-                u.setIdAdresse(rs.getInt("id_adresse"));
-                u.setTypeUtilisateur(rs.getString("type_utilisateur"));
+                e.setID(rs.getInt("id_utilisateur"));
+                e.setNom(rs.getString("nom"));
+                e.setPrenom(rs.getString("prenom"));
+                e.setTel(rs.getString("tel"));
+                e.setMail(rs.getString("mail"));
+                e.setIdAdresse(rs.getInt("id_adresse"));
+                e.setAdresse(rs.getString("adresse"));
+                e.setCodePostal(rs.getString("code_postal"));
+                e.setVille(rs.getString("ville"));
+                e.setPays(rs.getString("pays"));
+                e.setTypeUtilisateur(rs.getString("type_utilisateur"));
+                e.setNumeroEtudiant(rs.getString("numero_etudiant"));
+                e.setTypeAffiliation(rs.getString("type_affiliation"));
+                e.setCaisseAssuranceMaladie(rs.getString("caisse_assurance"));
+                e.setInscription(rs.getString("inscription"));
+                e.setEnseignantReferent(rs.getString("enseignant_referent"));
             } 
 
             // Une erreur 404 si l'identifiant de l'utilisateur ne correspond pas à un utilisateur dans la base.
-            if(u.getNom() == null) {
-                System.out.println("Utilisateur does not exist : " + id );
+            if(e.getNom() == null) {
+                System.out.println("Etudiant does not exist : " + id );
                 response.setStatus(404);
                 return null;
             } else {
-                return u; 
+                return e; 
             }
             
 
@@ -115,11 +129,10 @@ public class UtilisateurCRUD {
     }
 
 
-    //CREATE -- POST : /api/utilisateur/{id}
+    //CREATE -- POST : /utilisateur/{id}
     @PostMapping("/{id}")
-    public Utilisateur create(@PathVariable(value="id") int id, @RequestBody Utilisateur u, HttpServletResponse response){
+    public Etudiant create(@PathVariable(value="id") int id, @RequestBody Etudiant u, HttpServletResponse response){
         try (Connection connection = dataSource.getConnection()) {
-            Statement stmt = connection.createStatement(); 
             
             //une erreur 412 si l'identifiant du User dans l'URL n'est pas le même que celui du User dans le corp de la requête.
             if( !(id == (u.getID())) ) {
@@ -127,9 +140,9 @@ public class UtilisateurCRUD {
                 response.setStatus(412);
                 return null;
             }
-             //une erreur 403 si un Utilisateur existe déjà avec le même identifiant
+             //une erreur 403 si un Etudiant existe déjà avec le même identifiant
             if(read(id,response) == null) {
-                PreparedStatement p = connection.prepareStatement("INSERT INTO utilisateur values (?,?,?,?,?,?,?)");
+                PreparedStatement p = connection.prepareStatement("INSERT INTO etudiant values (?,?,?,?,?,?,?)");
                 p.setInt(1, u.getID());
                 p.setString(2, u.getNom() );
                 p.setString(3, u.getPrenom() );
@@ -138,7 +151,7 @@ public class UtilisateurCRUD {
                 p.setInt(6, u.getIdAdresse() );
                 p.setString(7, u.getTypeUtilisateur() );
                 p.executeUpdate();
-                Utilisateur inseree = this.read(id, response);
+                Etudiant inseree = this.read(id, response);
                 return inseree;
             }else {
                 System.out.println("Utilisateur already exist: " + id );
