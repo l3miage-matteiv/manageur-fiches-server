@@ -39,7 +39,7 @@ public class UtilisateurCRUD {
     public ArrayList<Utilisateur> getAllUtilisateurs(HttpServletResponse response) {
         try (Connection connection = dataSource.getConnection()) {
             Statement stmt = connection.createStatement(); 
-            ResultSet rs = stmt.executeQuery("SELECT * FROM utilisateur LEFT OUTER JOIN adresse ON (utilisateur.id_adresse = adresse.id)");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM utilisateur");
             
             ArrayList<Utilisateur> L = new ArrayList<Utilisateur>();
             while (rs.next()) { 
@@ -49,12 +49,11 @@ public class UtilisateurCRUD {
                 u.setPrenom(rs.getString("prenom"));
                 u.setTel(rs.getString("tel"));
                 u.setMail(rs.getString("mail"));
-                u.setIdAdresse(rs.getInt("id_adresse"));
+                u.setTypeUtilisateur(rs.getString("type_utilisateur"));
                 u.setAdresse(rs.getString("adresse"));
                 u.setCodePostal(rs.getString("code_postal"));
                 u.setVille(rs.getString("ville"));
                 u.setPays(rs.getString("pays"));
-                u.setTypeUtilisateur(rs.getString("type_utilisateur"));
                 L.add(u);
             } 
             return L;
@@ -77,7 +76,7 @@ public class UtilisateurCRUD {
     public Utilisateur read(@PathVariable(value="id") int id, HttpServletResponse response) {
         try (Connection connection = dataSource.getConnection()) {
             Statement stmt = connection.createStatement(); 
-            ResultSet rs = stmt.executeQuery("SELECT * FROM utilisateur where id = '" + id + "'");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM utilisateur WHERE id = '" + id + "'");
             
             Utilisateur u = new Utilisateur();
             while (rs.next()) { 
@@ -86,8 +85,11 @@ public class UtilisateurCRUD {
                 u.setPrenom(rs.getString("prenom"));
                 u.setTel(rs.getString("tel"));
                 u.setMail(rs.getString("mail"));
-                u.setIdAdresse(rs.getInt("id_adresse"));
                 u.setTypeUtilisateur(rs.getString("type_utilisateur"));
+                u.setAdresse(rs.getString("adresse"));
+                u.setCodePostal(rs.getString("code_postal"));
+                u.setVille(rs.getString("ville"));
+                u.setPays(rs.getString("pays"));
             } 
 
             // Une erreur 404 si l'identifiant de l'utilisateur ne correspond pas à un utilisateur dans la base.
@@ -123,20 +125,23 @@ public class UtilisateurCRUD {
             
             //une erreur 412 si l'identifiant du User dans l'URL n'est pas le même que celui du User dans le corp de la requête.
             if( !(id == (u.getID())) ) {
-                System.out.println("Request Body not equivanlent to variable path : " + id + "!=" + u.getID());
+                System.out.println("Request Body not equivalent to variable path : " + id + "!=" + u.getID());
                 response.setStatus(412);
                 return null;
             }
              //une erreur 403 si un Utilisateur existe déjà avec le même identifiant
             if(read(id,response) == null) {
-                PreparedStatement p = connection.prepareStatement("INSERT INTO utilisateur values (?,?,?,?,?,?,?)");
+                PreparedStatement p = connection.prepareStatement("INSERT INTO utilisateur values (?,?,?,?,?,?,?,?,?,?)");
                 p.setInt(1, u.getID());
                 p.setString(2, u.getNom() );
                 p.setString(3, u.getPrenom() );
                 p.setString(4, u.getTel() );
                 p.setString(5, u.getMail() );
-                p.setInt(6, u.getIdAdresse() );
-                p.setString(7, u.getTypeUtilisateur() );
+                p.setString(6, u.getTypeUtilisateur() );
+                p.setString(7, u.getAdresse());
+                p.setString(8, u.getCodePostal());
+                p.setString(9, u.getVille());
+                p.setString(10, u.getPays());
                 p.executeUpdate();
                 Utilisateur inseree = this.read(id, response);
                 return inseree;
@@ -178,14 +183,17 @@ public class UtilisateurCRUD {
                 return null;
 
             }else{
-                PreparedStatement p = connection.prepareStatement("UPDATE utilisateur SET id = ?,nom = ?, prenom = ?, tel = ?, mail = ?, id_adresse = ?, type_utilisateur = ? WHERE id = '"+id+"'");
+                PreparedStatement p = connection.prepareStatement("UPDATE utilisateur SET id = ?,nom = ?, prenom = ?, tel = ?, mail = ?, type_utilisateur = ?, adresse = ?, code_postal = ?, ville = ?, pays = ? WHERE id = '"+id+"'");
                 p.setInt(1, u.getID());
                 p.setString(2, u.getNom() );
                 p.setString(3, u.getPrenom() );
                 p.setString(4, u.getTel() );
                 p.setString(5, u.getMail() );
-                p.setInt(6, u.getIdAdresse() );
-                p.setString(7, u.getTypeUtilisateur() );
+                p.setString(6, u.getTypeUtilisateur() );
+                p.setString(7, u.getAdresse());
+                p.setString(8, u.getCodePostal());
+                p.setString(9, u.getVille());
+                p.setString(10, u.getPays());
                 p.executeUpdate();
                 Utilisateur inseree = this.read(id, response);
                 return inseree;
@@ -228,7 +236,6 @@ public class UtilisateurCRUD {
             System.err.println(e.getMessage());
         }
     }
-
 }
     
 

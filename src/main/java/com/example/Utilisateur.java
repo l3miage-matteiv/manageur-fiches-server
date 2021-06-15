@@ -6,7 +6,6 @@ public class Utilisateur {
     private String prenom;
     private String tel;
     private String mail;
-    private int idAdresse;
     private String adresse;
     private String codePostal;
     private String ville;
@@ -51,14 +50,6 @@ public class Utilisateur {
 
     public void setMail(String mail) {
         this.mail = mail;
-    }
-
-    public int getIdAdresse() {
-        return idAdresse;
-    }
-
-    public void setIdAdresse(int idAdresse) {
-        this.idAdresse = idAdresse;
     }
 
     public String getAdresse() {

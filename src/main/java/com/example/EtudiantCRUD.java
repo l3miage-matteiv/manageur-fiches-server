@@ -39,7 +39,7 @@ public class EtudiantCRUD {
     public ArrayList<Etudiant> getAllEtudiants(HttpServletResponse response) {
         try (Connection connection = dataSource.getConnection()) {
             Statement stmt = connection.createStatement(); 
-            ResultSet rs = stmt.executeQuery("SELECT * FROM etudiant LEFT OUTER JOIN utilisateur ON (etudiant.id_utilisateur = utilisateur.id) LEFT OUTER JOIN adresse ON (utilisateur.id_adresse = adresse.id)");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM etudiant LEFT OUTER JOIN utilisateur ON (etudiant.id_utilisateur = utilisateur.id)");
             
             ArrayList<Etudiant> L = new ArrayList<Etudiant>();
             while (rs.next()) { 
@@ -49,7 +49,6 @@ public class EtudiantCRUD {
                 e.setPrenom(rs.getString("prenom"));
                 e.setTel(rs.getString("tel"));
                 e.setMail(rs.getString("mail"));
-                e.setIdAdresse(rs.getInt("id_adresse"));
                 e.setAdresse(rs.getString("adresse"));
                 e.setCodePostal(rs.getString("code_postal"));
                 e.setVille(rs.getString("ville"));
@@ -82,7 +81,7 @@ public class EtudiantCRUD {
     public Etudiant read(@PathVariable(value="id") int id, HttpServletResponse response) {
         try (Connection connection = dataSource.getConnection()) {
             Statement stmt = connection.createStatement(); 
-            ResultSet rs = stmt.executeQuery("SELECT * FROM etudiant LEFT OUTER JOIN utilisateur ON (etudiant.id_utilisateur = utilisateur.id) LEFT OUTER JOIN adresse ON (utilisateur.id_adresse = adresse.id) where id_utilisateur = '" + id + "'");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM etudiant LEFT OUTER JOIN utilisateur ON (etudiant.id_utilisateur = utilisateur.id) where id_utilisateur = '" + id + "'");
             
             Etudiant e = new Etudiant();
             while (rs.next()) { 
@@ -91,7 +90,6 @@ public class EtudiantCRUD {
                 e.setPrenom(rs.getString("prenom"));
                 e.setTel(rs.getString("tel"));
                 e.setMail(rs.getString("mail"));
-                e.setIdAdresse(rs.getInt("id_adresse"));
                 e.setAdresse(rs.getString("adresse"));
                 e.setCodePostal(rs.getString("code_postal"));
                 e.setVille(rs.getString("ville"));
@@ -142,14 +140,22 @@ public class EtudiantCRUD {
             }
              //une erreur 403 si un Etudiant existe déjà avec le même identifiant
             if(read(id,response) == null) {
-                PreparedStatement p = connection.prepareStatement("INSERT INTO etudiant values (?,?,?,?,?,?,?)");
+                PreparedStatement p = connection.prepareStatement("INSERT INTO etudiant values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
                 p.setInt(1, u.getID());
                 p.setString(2, u.getNom() );
                 p.setString(3, u.getPrenom() );
                 p.setString(4, u.getTel() );
                 p.setString(5, u.getMail() );
-                p.setInt(6, u.getIdAdresse() );
-                p.setString(7, u.getTypeUtilisateur() );
+                p.setString(6, u.getTypeUtilisateur() );
+                p.setString(7, u.getAdresse());
+                p.setString(8, u.getCodePostal());
+                p.setString(9, u.getVille());
+                p.setString(10, u.getPays());
+                p.setString(11, u.getNumeroEtudiant());
+                p.setString(12, u.getTypeAffiliation());
+                p.setString(13, u.getCaisseAssuranceMaladie());
+                p.setString(14, u.getInscription());
+                p.setString(15, u.getEnseignantReferent());
                 p.executeUpdate();
                 Etudiant inseree = this.read(id, response);
                 return inseree;
@@ -174,33 +180,41 @@ public class EtudiantCRUD {
     
     //UPDATE -- PUT : /utilisateur/{chamisID}
     @PutMapping("/{id}")
-    public Utilisateur update(@PathVariable(value="id") int id, @RequestBody Utilisateur u, HttpServletResponse response) {
+    public Etudiant update(@PathVariable(value="id") int id, @RequestBody Etudiant etu, HttpServletResponse response) {
         try (Connection connection = dataSource.getConnection()) {
             Statement stmt = connection.createStatement(); 
            
-            // Une erreur 404 si l'identifiant de l'utilisateur ne correspond pas à un utilisateur dans la base.
-            if(u.getNom() == null) {
-                System.out.println("Utilisateur does not exist : " + id );
+            // Une erreur 404 si l'identifiant de l'Etudiant ne correspond pas à un Etudiant dans la base.
+            if(etu.getNom() == null) {
+                System.out.println("Etudiant does not exist : " + id );
                 response.setStatus(404);
                 return null;
 
             //une erreur 412 si l'identifiant du User dans l'URL n'est pas le même que celui du User dans le corp de la requête.
-            }else if( !(id == (u.getID())) ) {
-                System.out.println("Request Body not equivanlent to variable path : " + id + "!=" + u.getID());
+            } else if( !(id == (etu.getID())) ) {
+                System.out.println("Request Body not equivanlent to variable path : " + id + "!=" + etu.getID());
                 response.setStatus(412);
                 return null;
 
-            }else{
-                PreparedStatement p = connection.prepareStatement("UPDATE utilisateur SET id = ?,nom = ?, prenom = ?, tel = ?, mail = ?, id_adresse = ?, type_utilisateur = ? WHERE id = '"+id+"'");
-                p.setInt(1, u.getID());
-                p.setString(2, u.getNom() );
-                p.setString(3, u.getPrenom() );
-                p.setString(4, u.getTel() );
-                p.setString(5, u.getMail() );
-                p.setInt(6, u.getIdAdresse() );
-                p.setString(7, u.getTypeUtilisateur() );
+            } else {
+                PreparedStatement p = connection.prepareStatement("UPDATE etudiant SET id = ?,nom = ?, prenom = ?, tel = ?, mail = ?, type_utilisateur = ?, adresse = ?, code_postal = ?, ville = ?, pays = ?, numero_etudiant = ?, type_affiliation = ?, caisse_assurance = ?, inscription = ?, enseignant_referent = ? WHERE id = '"+id+"'");
+                p.setInt(1, etu.getID());
+                p.setString(2, etu.getNom() );
+                p.setString(3, etu.getPrenom() );
+                p.setString(4, etu.getTel() );
+                p.setString(5, etu.getMail() );
+                p.setString(6, etu.getTypeUtilisateur() );
+                p.setString(7, etu.getAdresse());
+                p.setString(8, etu.getCodePostal());
+                p.setString(9, etu.getVille());
+                p.setString(10, etu.getPays());
+                p.setString(11, etu.getNumeroEtudiant());
+                p.setString(12, etu.getTypeAffiliation());
+                p.setString(13, etu.getCaisseAssuranceMaladie());
+                p.setString(14, etu.getInscription());
+                p.setString(15, etu.getEnseignantReferent());
                 p.executeUpdate();
-                Utilisateur inseree = this.read(id, response);
+                Etudiant inseree = this.read(id, response);
                 return inseree;
             }   
 
