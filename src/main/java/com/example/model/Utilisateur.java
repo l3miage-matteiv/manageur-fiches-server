@@ -1,7 +1,18 @@
-package com.example;
+package com.example.model;
 
-public class Utilisateur {
-    private int id;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.io.Serializable;
+
+@Entity
+public class Utilisateur implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false, updatable = false)
+    private Long id;
     private String nom;
     private String prenom;
     private String tel;
@@ -11,12 +22,39 @@ public class Utilisateur {
     private String ville;
     private String pays;
     private String typeUtilisateur;
+
+    public Utilisateur() {}
+
+    public Utilisateur(Long id, String nom, String prenom, String tel, String mail, String adresse, String codePostal, String ville, String pays) {
+        this.id = id;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.tel = tel;
+        this.mail = mail;
+        this.adresse = adresse;
+        this.codePostal = codePostal;
+        this.ville = ville;
+        this.pays = pays;
+    }
+
+    public Utilisateur(Long id, String nom, String prenom, String tel, String mail, String adresse, String codePostal, String ville, String pays, String typeUtilisateur) {
+        this.id = id;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.tel = tel;
+        this.mail = mail;
+        this.adresse = adresse;
+        this.codePostal = codePostal;
+        this.ville = ville;
+        this.pays = pays;
+        this.typeUtilisateur = typeUtilisateur;
+    }
     
-    public int getID() {
+    public Long getID() {
         return id;
     }
 
-    public void setID(int id) {
+    public void setID(Long id) {
         this.id = id;
     }
 
