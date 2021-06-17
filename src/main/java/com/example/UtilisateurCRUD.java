@@ -74,7 +74,7 @@ public class UtilisateurCRUD {
 
     //READ -- GET 
     @GetMapping("/{id}")
-    public Utilisateur read(@PathVariable(value="id") int id, HttpServletResponse response) {
+    public Utilisateur getUtilisateurById(@PathVariable(value="id") int id, HttpServletResponse response) {
         try (Connection connection = dataSource.getConnection()) {
             Statement stmt = connection.createStatement(); 
             ResultSet rs = stmt.executeQuery("SELECT * FROM utilisateur WHERE id = '" + id + "'");
@@ -114,18 +114,45 @@ public class UtilisateurCRUD {
             System.err.println(e.getMessage());
             return null;
         }
-        
     }
 
+    //READ -- GET /utilisateur/last_utilisateur
+    @GetMapping("/last_utilisateur")
+    public Utilisateur getLastUtilisateur(HttpServletResponse response) {
+        try (Connection connection = dataSource.getConnection()) {
+            Statement stmt = connection.createStatement(); 
+            ResultSet rs = stmt.executeQuery("SELECT * FROM utilisateur ORDER BY ID DESC LIMIT 1");
+            
+            Utilisateur u = new Utilisateur();
+            while (rs.next()) { 
+                u.setID(rs.getLong("id"));
+                u.setNom(rs.getString("nom"));
+                u.setPrenom(rs.getString("prenom"));
+                u.setTel(rs.getString("tel"));
+                u.setMail(rs.getString("mail"));
+                u.setTypeUtilisateur(rs.getString("type_utilisateur"));
+                u.setAdresse(rs.getString("adresse"));
+                u.setCodePostal(rs.getString("code_postal"));
+                u.setVille(rs.getString("ville"));
+                u.setPays(rs.getString("pays"));
+            } 
+            return u;
+        } catch (Exception e) {
+            response.setStatus(500);
 
-    // @PostMapping("/{id}")
-    // public ResponseEntity<Utilisateur> addUtilisateur(@RequestBody Utilisateur utilisateur) {
-    //     Utilisateur newUtilisateur = 
-    // }
+            try {
+                response.getOutputStream().print( e.getMessage() );
+            } catch (Exception e2) {
+                System.err.println(e2.getMessage());
+            }
+            System.err.println(e.getMessage());
+            return null;
+        }
+    }
 
-    //CREATE -- POST : /api/utilisateur/{id}
-    @PostMapping("/{id}")
-    public Utilisateur create(@PathVariable(value="id") int id, @RequestBody Utilisateur u, HttpServletResponse response){
+    //CREATE -- POST : /utilisateur/add/{id}
+    @PostMapping("/add/{id}")
+    public Utilisateur addUtilisateur(@PathVariable(value="id") int id, @RequestBody Utilisateur u, HttpServletResponse response){
         try (Connection connection = dataSource.getConnection()) {
             Statement stmt = connection.createStatement(); 
             
@@ -136,7 +163,7 @@ public class UtilisateurCRUD {
                 return null;
             }
              //une erreur 403 si un Utilisateur existe déjà avec le même identifiant
-            if(read(id,response) == null) {
+            if(getUtilisateurById(id,response) == null) {
                 PreparedStatement p = connection.prepareStatement("INSERT INTO utilisateur values (?,?,?,?,?,?,?,?,?,?)");
                 p.setLong(1, u.getID());
                 p.setString(2, u.getNom() );
@@ -149,7 +176,7 @@ public class UtilisateurCRUD {
                 p.setString(9, u.getVille());
                 p.setString(10, u.getPays());
                 p.executeUpdate();
-                Utilisateur inseree = this.read(id, response);
+                Utilisateur inseree = this.getUtilisateurById(id, response);
                 return inseree;
             }else {
                 System.out.println("Utilisateur already exist: " + id );
@@ -171,8 +198,8 @@ public class UtilisateurCRUD {
 
     
     //UPDATE -- PUT : /utilisateur/{chamisID}
-    @PutMapping("/{id}")
-    public Utilisateur update(@PathVariable(value="id") int id, @RequestBody Utilisateur u, HttpServletResponse response) {
+    @PutMapping("/update/{id}")
+    public Utilisateur updateUtilisateur(@PathVariable(value="id") int id, @RequestBody Utilisateur u, HttpServletResponse response) {
         try (Connection connection = dataSource.getConnection()) {
             Statement stmt = connection.createStatement(); 
            
@@ -189,7 +216,7 @@ public class UtilisateurCRUD {
                 return null;
 
             }else{
-                PreparedStatement p = connection.prepareStatement("UPDATE utilisateur SET id = ?,nom = ?, prenom = ?, tel = ?, mail = ?, type_utilisateur = ?, adresse = ?, code_postal = ?, ville = ?, pays = ? WHERE id = '"+id+"'");
+                PreparedStatement p = connection.prepareStatement("UPDATE utilisateur id= ?, nom = ?, prenom = ?, tel = ?, mail = ?, type_utilisateur = ?, adresse = ?, code_postal = ?, ville = ?, pays = ? WHERE id = '"+id+"'");
                 p.setLong(1, u.getID());
                 p.setString(2, u.getNom() );
                 p.setString(3, u.getPrenom() );
@@ -201,7 +228,7 @@ public class UtilisateurCRUD {
                 p.setString(9, u.getVille());
                 p.setString(10, u.getPays());
                 p.executeUpdate();
-                Utilisateur inseree = this.read(id, response);
+                Utilisateur inseree = this.getUtilisateurById(id, response);
                 return inseree;
             }   
 
@@ -220,8 +247,8 @@ public class UtilisateurCRUD {
 
         
     //DELETE -- DELETE
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable(value="id") int id, HttpServletResponse response) {
+    @DeleteMapping("/delete/{id}")
+    public void deleteUtilisateur(@PathVariable(value="id") int id, HttpServletResponse response) {
         try (Connection connection = dataSource.getConnection()) {
             Statement stmt = connection.createStatement(); 
             int rs = stmt.executeUpdate("DELETE FROM utilisateur WHERE id = '"+id+"'");

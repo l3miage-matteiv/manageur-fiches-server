@@ -32,7 +32,7 @@
 //     }
 
 //     @GetMapping("/{id}")
-//     public ResponseEntity<Utilisateur> getAllUtilisateurById(@PathVariable("id") Long id) {
+//     public ResponseEntity<Utilisateur> getUtilisateurById(@PathVariable("id") Long id) {
 //         Utilisateur utilisateur = utilisateurService.findUtilisateurById(id);
 //         return new ResponseEntity<>(utilisateur, HttpStatus.OK);
 //     }
