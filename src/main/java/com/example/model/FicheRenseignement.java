@@ -22,10 +22,13 @@ public class FicheRenseignement implements Serializable {
     String mailEnseignent;
     Long idFicheAccueilStagiaire;
     Long idFicheTuteur;
+    String raisonSociale;
+    String representantLegal;
+    String progres;
 
     public FicheRenseignement() { }
 
-    public FicheRenseignement(Long id, Long idEtudiant, Long idServiceRH, Long idTuteur, Long idEnseignent, String mailServiceRH, String mailTuteur, String mailEnseignent, Long idFicheAccueilStagiaire, Long idFicheTuteur) {
+    public FicheRenseignement(Long id, Long idEtudiant, Long idServiceRH, Long idTuteur, Long idEnseignent, String mailServiceRH, String mailTuteur, String mailEnseignent, Long idFicheAccueilStagiaire, Long idFicheTuteur, String raisonSociale, String representantLegal, String progres) {
         this.id = id;
         this.idEtudiant = idEtudiant;
         this.idServiceRH = idServiceRH;
@@ -36,6 +39,9 @@ public class FicheRenseignement implements Serializable {
         this.mailEnseignent = mailEnseignent;
         this.idFicheAccueilStagiaire = idFicheAccueilStagiaire;
         this.idFicheTuteur = idFicheTuteur;
+        this.raisonSociale = raisonSociale;
+        this.representantLegal = representantLegal;
+        this.progres = progres;
     }
 
     public void setID(Long id) {
@@ -116,5 +122,29 @@ public class FicheRenseignement implements Serializable {
 
     public Long getIDFicheTuteur() {
         return this.idFicheTuteur;
+    }
+
+    public void setRaisonSociale(String raisonSociale) {
+        this.raisonSociale = raisonSociale;
+    }
+
+    public String getRaisonSociale() {
+        return this.raisonSociale;
+    }
+
+    public void setRepresentantLegal(String representantLegal) {
+        this.representantLegal = representantLegal;
+    }
+
+    public String getRepresentantLegal() {
+        return this.representantLegal;
+    }
+
+    public void setProgres(String progres) {
+        this.progres = progres;
+    }
+
+    public String getProgres() {
+        return this.progres;
     }
 }
