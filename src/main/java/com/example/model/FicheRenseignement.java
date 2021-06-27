@@ -16,10 +16,10 @@ public class FicheRenseignement implements Serializable {
     Long idEtudiant;
     Long idServiceRH;
     Long idTuteur;
-    Long idEnseignent;
+    Long idEnseignant;
     String mailServiceRH;
     String mailTuteur;
-    String mailEnseignent;
+    String mailEnseignant;
     Long idFicheAccueilStagiaire;
     Long idFicheTuteur;
     String raisonSociale;
@@ -28,15 +28,15 @@ public class FicheRenseignement implements Serializable {
 
     public FicheRenseignement() { }
 
-    public FicheRenseignement(Long id, Long idEtudiant, Long idServiceRH, Long idTuteur, Long idEnseignent, String mailServiceRH, String mailTuteur, String mailEnseignent, Long idFicheAccueilStagiaire, Long idFicheTuteur, String raisonSociale, String representantLegal, String progres) {
+    public FicheRenseignement(Long id, Long idEtudiant, Long idServiceRH, Long idTuteur, Long idEnseignant, String mailServiceRH, String mailTuteur, String mailEnseignant, Long idFicheAccueilStagiaire, Long idFicheTuteur, String raisonSociale, String representantLegal, String progres) {
         this.id = id;
         this.idEtudiant = idEtudiant;
         this.idServiceRH = idServiceRH;
         this.idTuteur = idTuteur;
-        this.idEnseignent = idEnseignent;
+        this.idEnseignant = idEnseignant;
         this.mailServiceRH = mailServiceRH;
         this.mailTuteur = mailTuteur;
-        this.mailEnseignent = mailEnseignent;
+        this.mailEnseignant = mailEnseignant;
         this.idFicheAccueilStagiaire = idFicheAccueilStagiaire;
         this.idFicheTuteur = idFicheTuteur;
         this.raisonSociale = raisonSociale;
@@ -76,12 +76,12 @@ public class FicheRenseignement implements Serializable {
         return this.idTuteur;
     }
 
-    public void setIDEnseignent(Long idEnseignent) {
-        this.idEnseignent = idEnseignent;
+    public void setIDEnseignant(Long idEnseignant) {
+        this.idEnseignant = idEnseignant;
     }
 
-    public Long getIDEnseignent(){
-        return this.idEnseignent;
+    public Long getIDEnseignant(){
+        return this.idEnseignant;
     }
 
     public void setMailServiceRH(String mailServiceRH) {
@@ -100,12 +100,12 @@ public class FicheRenseignement implements Serializable {
         return this.mailTuteur;
     }
 
-    public void setMailEnseignent(String mailEnseignent) {
-        this.mailEnseignent = mailEnseignent;
+    public void setMailEnseignant(String mailEnseignant) {
+        this.mailEnseignant = mailEnseignant;
     }
 
-    public String getMailEnseignent() {
-        return this.mailEnseignent;
+    public String getMailEnseignant() {
+        return this.mailEnseignant;
     }
 
     public void setIDFicheAccueilStagiaire(Long id) {

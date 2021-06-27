@@ -49,10 +49,10 @@ public class FicheRenseignementCRUD {
                 u.setIDEtudiant(rs.getLong("id_etudiant"));
                 u.setIDServiceRH(rs.getLong("id_service_rh"));
                 u.setIDTuteur(rs.getLong("id_tuteur"));
-                u.setIDEnseignent(rs.getLong("id_enseignent"));
+                u.setIDEnseignant(rs.getLong("id_enseignant"));
                 u.setMailServiceRH(rs.getString("mail_service_rh"));
                 u.setMailTuteur(rs.getString("mail_tuteur"));
-                u.setMailEnseignent(rs.getString("mail_enseignent"));
+                u.setMailEnseignant(rs.getString("mail_enseignant"));
                 u.setIDFicheAccueilStagiaire(rs.getLong("id_fiche_accueil_stagiaire"));
                 u.setIDFicheTuteur(rs.getLong("id_fiche_tuteur"));
                 u.setRaisonSociale(rs.getString("raison_sociale"));
@@ -88,10 +88,10 @@ public class FicheRenseignementCRUD {
                 u.setIDEtudiant(rs.getLong("id_etudiant"));
                 u.setIDServiceRH(rs.getLong("id_service_rh"));
                 u.setIDTuteur(rs.getLong("id_tuteur"));
-                u.setIDEnseignent(rs.getLong("id_enseignent"));
+                u.setIDEnseignant(rs.getLong("id_enseignant"));
                 u.setMailServiceRH(rs.getString("mail_service_rh"));
                 u.setMailTuteur(rs.getString("mail_tuteur"));
-                u.setMailEnseignent(rs.getString("mail_enseignent"));
+                u.setMailEnseignant(rs.getString("mail_enseignant"));
                 u.setIDFicheAccueilStagiaire(rs.getLong("id_fiche_accueil_stagiaire"));
                 u.setIDFicheTuteur(rs.getLong("id_fiche_tuteur"));
                 u.setRaisonSociale(rs.getString("raison_sociale"));
@@ -135,10 +135,10 @@ public class FicheRenseignementCRUD {
                 u.setIDEtudiant(rs.getLong("id_etudiant"));
                 u.setIDServiceRH(rs.getLong("id_service_rh"));
                 u.setIDTuteur(rs.getLong("id_tuteur"));
-                u.setIDEnseignent(rs.getLong("id_enseignent"));
+                u.setIDEnseignant(rs.getLong("id_enseignant"));
                 u.setMailServiceRH(rs.getString("mail_service_rh"));
                 u.setMailTuteur(rs.getString("mail_tuteur"));
-                u.setMailEnseignent(rs.getString("mail_enseignent"));
+                u.setMailEnseignant(rs.getString("mail_enseignant"));
                 u.setIDFicheAccueilStagiaire(rs.getLong("id_fiche_accueil_stagiaire"));
                 u.setIDFicheTuteur(rs.getLong("id_fiche_tuteur"));
                 u.setRaisonSociale(rs.getString("raison_sociale"));
@@ -178,10 +178,10 @@ public class FicheRenseignementCRUD {
                 p.setLong(2, u.getIDEtudiant());
                 p.setLong(3, u.getIDServiceRH());
                 p.setLong(4, u.getIDTuteur());
-                p.setLong(5, u.getIDEnseignent());
+                p.setLong(5, u.getIDEnseignant());
                 p.setString(6, u.getMailServiceRH());
                 p.setString(7, u.getMailTuteur());
-                p.setString(8, u.getMailEnseignent());
+                p.setString(8, u.getMailEnseignant());
                 p.setLong(9, u.getIDFicheAccueilStagiaire());
                 p.setLong(10, u.getIDFicheTuteur());
                 p.setString(11, u.getRaisonSociale());
@@ -227,15 +227,15 @@ public class FicheRenseignementCRUD {
                 return null;
 
             }else{
-                PreparedStatement p = connection.prepareStatement("UPDATE fiche id= ?, id_etudiant = ?, id_service_rh = ?, id_tuteur = ?, id_enseignent = ?, mail_service_rh = ?, mail_tuteur = ?, mail_enseignent = ?, id_fiche_accueil_stagiaire = ?, raison_sociale = ?, representant_legal = ?, progres = ? WHERE id = '"+id+"'");
+                PreparedStatement p = connection.prepareStatement("UPDATE fiche id= ?, id_etudiant = ?, id_service_rh = ?, id_tuteur = ?, id_enseignant = ?, mail_service_rh = ?, mail_tuteur = ?, mail_enseignant = ?, id_fiche_accueil_stagiaire = ?, raison_sociale = ?, representant_legal = ?, progres = ? WHERE id = '"+id+"'");
                 p.setLong(1, u.getID());
                 p.setLong(2, u.getIDEtudiant());
                 p.setLong(3, u.getIDServiceRH());
                 p.setLong(4, u.getIDTuteur());
-                p.setLong(5, u.getIDEnseignent());
+                p.setLong(5, u.getIDEnseignant());
                 p.setString(6, u.getMailServiceRH());
                 p.setString(7, u.getMailTuteur());
-                p.setString(8, u.getMailEnseignent());
+                p.setString(8, u.getMailEnseignant());
                 p.setLong(9, u.getIDFicheAccueilStagiaire());
                 p.setLong(10, u.getIDFicheTuteur());
                 p.setString(11, u.getRaisonSociale());
