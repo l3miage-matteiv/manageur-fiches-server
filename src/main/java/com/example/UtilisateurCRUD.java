@@ -116,6 +116,40 @@ public class UtilisateurCRUD {
         }
     }
 
+    //READ -- GET /utilisateur/mail/{mail}
+    @GetMapping("/mail/{mail}")
+    public Utilisateur getUtilisateurByMail(@PathVariable(value="mail") String mail, HttpServletResponse response) {
+        try (Connection connection = dataSource.getConnection()) {
+            Statement stmt = connection.createStatement(); 
+            ResultSet rs = stmt.executeQuery("SELECT * FROM utilisateur WHERE mail = '" + mail + "'");
+            
+            Utilisateur u = new Utilisateur();
+            while (rs.next()) { 
+                u.setID(rs.getLong("id"));
+                u.setNom(rs.getString("nom"));
+                u.setPrenom(rs.getString("prenom"));
+                u.setTel(rs.getString("tel"));
+                u.setMail(rs.getString("mail"));
+                u.setTypeUtilisateur(rs.getString("type_utilisateur"));
+                u.setAdresse(rs.getString("adresse"));
+                u.setCodePostal(rs.getString("code_postal"));
+                u.setVille(rs.getString("ville"));
+                u.setPays(rs.getString("pays"));
+            } 
+            return u;
+        } catch (Exception e) {
+            response.setStatus(500);
+
+            try {
+                response.getOutputStream().print( e.getMessage() );
+            } catch (Exception e2) {
+                System.err.println(e2.getMessage());
+            }
+            System.err.println(e.getMessage());
+            return null;
+        }
+    }
+
     //READ -- GET /utilisateur/last_utilisateur
     @GetMapping("/last_utilisateur")
     public Utilisateur getLastUtilisateur(HttpServletResponse response) {
