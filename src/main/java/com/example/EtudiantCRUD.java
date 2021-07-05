@@ -198,7 +198,7 @@ public class EtudiantCRUD {
                 return null;
 
             } else {
-                PreparedStatement p = connection.prepareStatement("UPDATE etudiant SET id = ?,nom = ?, prenom = ?, tel = ?, mail = ?, type_utilisateur = ?, adresse = ?, code_postal = ?, ville = ?, pays = ?, numero_etudiant = ?, type_affiliation = ?, caisse_assurance = ?, inscription = ?, enseignant_referent = ? WHERE id = '"+id+"'");
+                PreparedStatement p = connection.prepareStatement("UPDATE etudiant SET id = ?, nom = ?, prenom = ?, tel = ?, mail = ?, type_utilisateur = ?, adresse = ?, code_postal = ?, ville = ?, pays = ?, numero_etudiant = ?, type_affiliation = ?, caisse_assurance = ?, inscription = ?, enseignant_referent = ? WHERE id = '"+id+"'");
                 p.setLong(1, etu.getID());
                 p.setString(2, etu.getNom() );
                 p.setString(3, etu.getPrenom() );
