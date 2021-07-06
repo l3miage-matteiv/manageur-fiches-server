@@ -231,7 +231,7 @@ public class UtilisateurCRUD {
     }
 
     
-    //UPDATE -- PUT : /utilisateur/{chamisID}
+    //UPDATE -- PUT : /utilisateur/update/id
     @PutMapping("/update/{id}")
     public Utilisateur updateUtilisateur(@PathVariable(value="id") int id, @RequestBody Utilisateur u, HttpServletResponse response) {
         try (Connection connection = dataSource.getConnection()) {

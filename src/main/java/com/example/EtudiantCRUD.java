@@ -128,8 +128,8 @@ public class EtudiantCRUD {
     }
 
 
-    //CREATE -- POST : /utilisateur/{id}
-    @PostMapping("/{id}")
+    //CREATE -- POST : /etudiant/add/{id}
+    @PostMapping("/add/{id}")
     public Etudiant create(@PathVariable(value="id") int id, @RequestBody Etudiant etu, HttpServletResponse response){
         try (Connection connection = dataSource.getConnection()) {
             
@@ -180,7 +180,7 @@ public class EtudiantCRUD {
 
     
     //UPDATE -- PUT : /utilisateur/{chamisID}
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public Etudiant update(@PathVariable(value="id") int id, @RequestBody Etudiant etu, HttpServletResponse response) {
         try (Connection connection = dataSource.getConnection()) {
             Statement stmt = connection.createStatement(); 
@@ -234,7 +234,7 @@ public class EtudiantCRUD {
 
         
     //DELETE -- DELETE
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable(value="id") int id, HttpServletResponse response) {
         try (Connection connection = dataSource.getConnection()) {
             Statement stmt = connection.createStatement(); 
