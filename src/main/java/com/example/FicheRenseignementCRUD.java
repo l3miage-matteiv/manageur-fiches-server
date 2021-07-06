@@ -75,7 +75,7 @@ public class FicheRenseignementCRUD {
     }
 
 
-    //READ -- GET 
+    //READ -- GET /fiche_renseignement/id
     @GetMapping("/{id}")
     public FicheRenseignement getFicheById(@PathVariable(value="id") int id, HttpServletResponse response) {
         try (Connection connection = dataSource.getConnection()) {
@@ -107,11 +107,8 @@ public class FicheRenseignementCRUD {
             } else {
                 return u; 
             }
-            
-
         } catch (Exception e) {
             response.setStatus(500);
-
             try {
                 response.getOutputStream().print( e.getMessage() );
             } catch (Exception e2) {
@@ -122,7 +119,46 @@ public class FicheRenseignementCRUD {
         }
     }
 
-    //READ -- GET /utilisateur/last_utilisateur
+    //READ -- GET /fiche_renseignement/utilisateur/id
+    @GetMapping("/utilisateur/{id}")
+    public ArrayList<FicheRenseignement> getFicheByIdUtilisateur(@PathVariable(value="id") int id, HttpServletResponse response) {
+        try (Connection connection = dataSource.getConnection()) {
+            Statement stmt = connection.createStatement(); 
+            ResultSet rs = stmt.executeQuery("SELECT * FROM fiche WHERE id_etudiant = '" + id + "' OR id_service_rh = '" + id + "' OR id_tuteur = '" + id + "' OR id_enseignant = '" + id + "'");
+            
+            ArrayList<FicheRenseignement> L = new ArrayList<FicheRenseignement>();
+            while (rs.next()) { 
+                FicheRenseignement u = new FicheRenseignement();
+                u.setID(rs.getLong("id"));
+                u.setIDEtudiant(rs.getLong("id_etudiant"));
+                u.setIDServiceRH(rs.getLong("id_service_rh"));
+                u.setIDTuteur(rs.getLong("id_tuteur"));
+                u.setIDEnseignant(rs.getLong("id_enseignant"));
+                u.setMailServiceRH(rs.getString("mail_service_rh"));
+                u.setMailTuteur(rs.getString("mail_tuteur"));
+                u.setMailEnseignant(rs.getString("mail_enseignant"));
+                u.setIDFicheAccueilStagiaire(rs.getLong("id_fiche_accueil_stagiaire"));
+                u.setIDFicheTuteur(rs.getLong("id_fiche_tuteur"));
+                u.setRaisonSociale(rs.getString("raison_sociale"));
+                u.setRepresentantLegal(rs.getString("representant_legal"));
+                u.setProgres(rs.getString("progres"));
+                L.add(u);
+            } 
+            return L;
+            
+        } catch (Exception e) {
+            response.setStatus(500);
+            try {
+                response.getOutputStream().print( e.getMessage() );
+            } catch (Exception e2) {
+                System.err.println(e2.getMessage());
+            }
+            System.err.println(e.getMessage());
+            return null;
+        }
+    }
+
+    //READ -- GET /fiche_renseignement/last_fiche_renseignement
     @GetMapping("/last_fiche_renseignement")
     public FicheRenseignement getLastUtilisateur(HttpServletResponse response) {
         try (Connection connection = dataSource.getConnection()) {
@@ -159,7 +195,7 @@ public class FicheRenseignementCRUD {
         }
     }
 
-    // CREATE -- POST : /fiche/add/{id}
+    // CREATE -- POST : /fiche_renseignement/add/{id}
     @PostMapping("/add/{id}")
     public FicheRenseignement addFiche(@PathVariable(value="id") int id, @RequestBody FicheRenseignement u, HttpServletResponse response){
         try (Connection connection = dataSource.getConnection()) {
