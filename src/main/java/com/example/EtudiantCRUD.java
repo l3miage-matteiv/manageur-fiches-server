@@ -40,7 +40,7 @@ public class EtudiantCRUD {
     public ArrayList<Etudiant> getAllEtudiants(HttpServletResponse response) {
         try (Connection connection = dataSource.getConnection()) {
             Statement stmt = connection.createStatement(); 
-            ResultSet rs = stmt.executeQuery("SELECT * FROM etudiant LEFT OUTER JOIN utilisateur ON (etudiant.id_utilisateur = utilisateur.id)");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM etudiant LEFT OUTER JOIN utilisateur ON (etudiant.id_utilisateur = utilisateur.id) WHERE type_utilisateur = 'Étudiant'");
             
             ArrayList<Etudiant> L = new ArrayList<Etudiant>();
             while (rs.next()) { 
@@ -82,7 +82,7 @@ public class EtudiantCRUD {
     public Etudiant read(@PathVariable(value="id") int id, HttpServletResponse response) {
         try (Connection connection = dataSource.getConnection()) {
             Statement stmt = connection.createStatement(); 
-            ResultSet rs = stmt.executeQuery("SELECT * FROM etudiant LEFT OUTER JOIN utilisateur ON (etudiant.id_utilisateur = utilisateur.id) where id_utilisateur = '" + id + "'");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM etudiant LEFT OUTER JOIN utilisateur ON (etudiant.id_utilisateur = utilisateur.id) where id = '" + id + "'");
             
             Etudiant e = new Etudiant();
             while (rs.next()) { 
@@ -141,22 +141,13 @@ public class EtudiantCRUD {
             }
              //une erreur 403 si un Etudiant existe déjà avec le même identifiant
             if(read(id,response) == null) {
-                PreparedStatement p = connection.prepareStatement("INSERT INTO etudiant values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                PreparedStatement p = connection.prepareStatement("INSERT INTO etudiant values (?,?,?,?,?,?)");
                 p.setLong(1, etu.getID());
-                p.setString(2, etu.getNom() );
-                p.setString(3, etu.getPrenom() );
-                p.setString(4, etu.getTel() );
-                p.setString(5, etu.getMail() );
-                p.setString(6, etu.getTypeUtilisateur() );
-                p.setString(7, etu.getAdresse());
-                p.setString(8, etu.getCodePostal());
-                p.setString(9, etu.getVille());
-                p.setString(10, etu.getPays());
-                p.setString(11, etu.getNumeroEtudiant());
-                p.setString(12, etu.getTypeAffiliation());
-                p.setString(13, etu.getCaisseAssuranceMaladie());
-                p.setString(14, etu.getInscription());
-                p.setString(15, etu.getEnseignantReferent());
+                p.setString(2, etu.getNumeroEtudiant());
+                p.setString(3, etu.getTypeAffiliation());
+                p.setString(4, etu.getCaisseAssuranceMaladie());
+                p.setString(5, etu.getInscription());
+                p.setString(6, etu.getEnseignantReferent());
                 p.executeUpdate();
                 Etudiant inseree = this.read(id, response);
                 return inseree;
@@ -198,7 +189,7 @@ public class EtudiantCRUD {
                 return null;
 
             } else {
-                PreparedStatement p = connection.prepareStatement("UPDATE etudiant SET id = ?, nom = ?, prenom = ?, tel = ?, mail = ?, type_utilisateur = ?, adresse = ?, code_postal = ?, ville = ?, pays = ?, numero_etudiant = ?, type_affiliation = ?, caisse_assurance = ?, inscription = ?, enseignant_referent = ? WHERE id = '"+id+"'");
+                PreparedStatement p = connection.prepareStatement("UPDATE etudiant SET id_utilisateur = ?, nom = ?, prenom = ?, tel = ?, mail = ?, type_utilisateur = ?, adresse = ?, code_postal = ?, ville = ?, pays = ?, numero_etudiant = ?, type_affiliation = ?, caisse_assurance = ?, inscription = ?, enseignant_referent = ? WHERE id = '"+id+"'");
                 p.setLong(1, etu.getID());
                 p.setString(2, etu.getNom() );
                 p.setString(3, etu.getPrenom() );
